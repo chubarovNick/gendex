@@ -2,7 +2,8 @@
 
 [![Hex.pm](https://img.shields.io/hexpm/v/gendex.svg?style=flat-square)](https://hex.pm/packages/gendex)
 
-Gendex is an Elixir library that will tell you the most likely gender of a person based on first name.  It uses the underlying data from the program "gender" by Jorg Michael (described [here](http://www.autohotkey.com/community/viewtopic.php?t=22000)).
+Gendex is an Elixir library that will tell you the most likely gender of a person based on their first name.
+It uses a UTF-8 encoded version of the underlying data from the program "gender" by Jorg Michael (described [here](http://www.autohotkey.com/community/viewtopic.php?t=22000)).
 
 Inspired by [Gender Detector](https://github.com/bmuller/gender_detector).
 
@@ -12,7 +13,7 @@ First, add Gendex to your `mix.exs` dependencies:
 
 ```elixir
 def deps do
-  [{:gendex, "~> 0.1.0"}]
+  [{:gendex, "~> 0.1.1"}]
 end
 ```
 
@@ -50,7 +51,7 @@ Gendex.lookup("Sally")
 #=> :female
 
 Gendex.lookup("Pauley")
-#=> :androgynous
+#=> :unisex
 ```
 
 ## TODO
