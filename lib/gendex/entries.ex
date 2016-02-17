@@ -1,13 +1,14 @@
-defmodule Gendex.Names do
+defmodule Gendex.Entries do
   @moduledoc false
 
-  @doc false
-  def start_link do
-    Agent.start_link(fn -> Map.new end, name: __MODULE__)
-  end
+  @table :gendex_entries
 
   @doc false
-  def exists?(name), do: Agent.get __MODULE__, &Map.has_key?(&1, name)
+  def start_link, do: :ets.new(@table, [:set, :protected, :named_table,
+                                        read_concurrency: true])
+
+  @doc false
+  def exists?(name), do: :ets.member(@table, name)
 
   @doc false
   def set(name, gender, country_values) do
@@ -20,18 +21,15 @@ defmodule Gendex.Names do
         set(String.replace(name, "+", r), gender, country_values)
       end
     else
-      item = {gender, country_values}
-      Agent.update __MODULE__, fn(names) ->
-        case Map.fetch(names, name) do
-          {:ok, value} ->
-            Map.put(names, name, value ++ [item])
-          :error ->
-            Map.put_new(names, name, [item])
-        end
+      item = [{gender, country_values}]
+      if exists?(name) do
+        item = :ets.lookup_element(@table, name, 2) ++ item
       end
+
+      :ets.insert(@table, {name, item})
     end
   end
 
   @doc false
-  def all, do: Agent.get __MODULE__, &Map.to_list(&1)
+  def all, do: :ets.tab2list(@table)
 end

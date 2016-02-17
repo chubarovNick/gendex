@@ -1,7 +1,7 @@
 defmodule Gendex.Parser do
   @moduledoc false
 
-  alias Gendex.Names
+  alias Gendex.Entries
 
   require Logger
 
@@ -30,13 +30,13 @@ defmodule Gendex.Parser do
     name = String.downcase(name)
 
     case gender do
-      "M" -> Names.set(name, :male, country_values)
-      "1M" -> Names.set(name, :mostly_male, country_values)
-      "?M" -> Names.set(name, :mostly_male, country_values)
-      "F" -> Names.set(name, :female, country_values)
-      "1F" -> Names.set(name, :mostly_female, country_values)
-      "?F" -> Names.set(name, :mostly_female, country_values)
-      "?" -> Names.set(name, :unisex, country_values)
+      "M" -> Entries.set(name, :male, country_values)
+      "1M" -> Entries.set(name, :mostly_male, country_values)
+      "?M" -> Entries.set(name, :mostly_male, country_values)
+      "F" -> Entries.set(name, :female, country_values)
+      "1F" -> Entries.set(name, :mostly_female, country_values)
+      "?F" -> Entries.set(name, :mostly_female, country_values)
+      "?" -> Entries.set(name, :unisex, country_values)
       _ -> raise "Not sure what to do with a gender of #{gender}"
     end
   end

@@ -20,14 +20,14 @@ defmodule Gendex do
 
   use Application
 
-  alias Gendex.Names
+  alias Gendex.Entries
   alias Gendex.Parser
 
   @doc false
   def start(_type, _args) do
-    result = Names.start_link
+    Entries.start_link
     :ok = Parser.parse
-    result
+    {:ok, self}
   end
 
   @doc """
@@ -44,7 +44,7 @@ defmodule Gendex do
   def lookup(name), do: name |> String.downcase |> most_popular_gender
 
   @doc """
-  Checks whether a name exists in `Gendex.Names`.
+  Checks whether a name exists in `Gendex.Entries`.
 
   Returns `true` if it exists, otherwise `false`.
 
@@ -56,11 +56,11 @@ defmodule Gendex do
       iex> Gendex.name_exists?("Unknown")
       false
   """
-  def name_exists?(name), do: name |> String.downcase |> Names.exists?
+  def name_exists?(name), do: name |> String.downcase |> Entries.exists?
 
   defp most_popular_gender(name) do
     if name_exists?(name) do
-      [{_, matches}|_] = Enum.filter Names.all, fn(x) ->
+      [{_, matches}|_] = Enum.filter Entries.all, fn(x) ->
         case x do
           {^name, _} -> true
           _ -> false
@@ -75,6 +75,7 @@ defmodule Gendex do
         |> Enum.filter(fn(x) -> String.strip(x) != "" end)
         |> length
       end
+
       gender
     else
       :unknown

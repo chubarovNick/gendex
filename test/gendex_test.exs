@@ -9,6 +9,7 @@ defmodule GendexTest do
 
   test "should return correct gender for international name" do
     assert Gendex.lookup("Álfrún") == :female
+    assert Gendex.lookup("Maëlle") == :female
   end
 
   test "should return true if name exists" do
