@@ -10,7 +10,7 @@ defmodule Gendex.Mixfile do
      version: @version,
      name: "Gendex",
      package: package,
-     elixir: "~> 1.2",
+     elixir: "~> 1.0",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      source_url: @url,
