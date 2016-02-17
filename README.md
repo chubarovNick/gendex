@@ -1,6 +1,6 @@
 # Gendex
 
-[![Hex.pm](https://img.shields.io/hexpm/v/gendex.svg?style=flat-square)](https://hex.pm/packages/gendex)
+[![Build Status](https://travis-ci.org/dre1080/gendex.svg?branch=master)](https://travis-ci.org/dre1080/gendex) [![Hex.pm](https://img.shields.io/hexpm/v/gendex.svg?style=flat-square)](https://hex.pm/packages/gendex)
 
 Gendex is an Elixir library that will tell you the most likely gender of a person based on their first name.
 It uses a UTF-8 encoded version of the underlying data from the program "gender" by Jorg Michael (described [here](http://www.autohotkey.com/community/viewtopic.php?t=22000)).
