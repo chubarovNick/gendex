@@ -55,8 +55,7 @@ defmodule Gendex do
       false
   """
   def name_exists?(name) do
-    name = String.downcase(name)
-    if Names.exists?(name), do: true, else: false
+    name |> String.downcase |> Names.exists?
   end
 
   defp most_popular_gender(name) do
