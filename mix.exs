@@ -1,7 +1,7 @@
 defmodule Gendex.Mixfile do
   use Mix.Project
 
-  @version "0.3.0"
+  @version "0.4.0"
   @url "https://github.com/dre1080/gendex"
   @docs_url "http://hexdocs.pm/gendex"
 
@@ -10,7 +10,7 @@ defmodule Gendex.Mixfile do
      version: @version,
      name: "Gendex",
      package: package,
-     elixir: "~> 1.0",
+     elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      source_url: @url,
