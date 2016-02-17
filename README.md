@@ -13,7 +13,7 @@ First, add Gendex to your `mix.exs` dependencies:
 
 ```elixir
 def deps do
-  [{:gendex, "~> 0.2.0"}]
+  [{:gendex, "~> 0.3.0"}]
 end
 ```
 
