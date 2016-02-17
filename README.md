@@ -38,7 +38,7 @@ Optionally, you can also set the path to your own `nam_dict.txt` (utf8 encoded)
 by adding this to your config:
 
 ```elixir
-    config :gendex, dict_path: "/path/to/custom/dict"
+config :gendex, dict_path: "/path/to/custom/dict"
 ```
 
 ## Usage
