@@ -41,7 +41,8 @@ defmodule Gendex do
       iex> Gendex.lookup("Unavailable")
       :unknown
   """
-  def lookup(name), do: name |> String.downcase |> most_popular_gender
+  def lookup(name),
+    do: name |> String.downcase |> most_likely_gender
 
   @doc """
   Checks whether a name exists in `Gendex.Entries`.
@@ -56,19 +57,20 @@ defmodule Gendex do
       iex> Gendex.name_exists?("Unknown")
       false
   """
-  def name_exists?(name), do: name |> String.downcase |> Entries.exists?
+  def name_exists?(name),
+    do: name |> String.downcase |> Entries.has_key?
 
-  defp most_popular_gender(name) do
+  defp most_likely_gender(name) do
     if name_exists?(name) do
-      [{_, matches}|_] = Enum.filter Entries.all, fn(x) ->
-        case x do
+      [{_, entries}|_] = Enum.filter Entries.all, fn(entry) ->
+        case entry do
           {^name, _} -> true
           _ -> false
         end
       end
 
-      {gender, _} = Enum.max_by matches, fn(match) ->
-        {_, country_values} = match
+      {gender, _} = Enum.max_by entries, fn(entry) ->
+        {_, country_values} = entry
 
         country_values
         |> String.split("")

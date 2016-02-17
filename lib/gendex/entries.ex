@@ -4,11 +4,16 @@ defmodule Gendex.Entries do
   @table :gendex_entries
 
   @doc false
-  def start_link, do: :ets.new(@table, [:set, :protected, :named_table,
-                                        read_concurrency: true])
+  def start_link,
+    do: :ets.new(@table, [:set, :protected, :named_table, read_concurrency: true])
 
   @doc false
-  def exists?(name), do: :ets.member(@table, name)
+  def has_key?(name),
+    do: :ets.member(@table, name)
+
+  @doc false
+  def all,
+    do: :ets.tab2list(@table)
 
   @doc false
   def set(name, gender, country_values) do
@@ -22,14 +27,11 @@ defmodule Gendex.Entries do
       end
     else
       item = [{gender, country_values}]
-      if exists?(name) do
+      if has_key?(name) do
         item = :ets.lookup_element(@table, name, 2) ++ item
       end
 
       :ets.insert(@table, {name, item})
     end
   end
-
-  @doc false
-  def all, do: :ets.tab2list(@table)
 end
