@@ -3,7 +3,7 @@ defmodule Gendex do
   Gendex is a library that will tell you the most likely gender
   of a person based on first name.
 
-  It uses the underlying data from the program “gender”
+  It uses the underlying data from the program "gender"
   by Jorg Michael (described [here](http://www.autohotkey.com/community/viewtopic.php?t=22000)).
 
   ## Examples
