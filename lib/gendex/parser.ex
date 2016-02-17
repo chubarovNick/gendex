@@ -3,14 +3,21 @@ defmodule Gendex.Parser do
 
   alias Gendex.Names
 
+  require Logger
+
+  @dict_path "priv/nam_dict.utf8.txt"
+
   @doc false
   def parse do
-    file = Application.get_env(:gendex, :dict_path, dict_path)
+    default_path = Application.app_dir(:gendex, @dict_path)
+    file = Application.get_env(:gendex, :dict_path, default_path)
+
+    Logger.debug("Gendex parsing using dict_path at '#{file}'.")
+
     file
     |> File.stream!([:utf8])
-    |> Stream.filter(&readable_line?/1)
-    |> Stream.each(&parse_name_line/1)
-    |> Stream.run
+    |> Enum.filter(&readable_line?/1)
+    |> Enum.each(&parse_name_line/1)
   end
 
   defp parse_name_line(line) do
@@ -37,8 +44,4 @@ defmodule Gendex.Parser do
   defp readable_line?(line) do
     !String.starts_with?(line, "#") && !String.starts_with?(line, "=")
   end
-
-  defp priv_path, do: "#{:code.priv_dir('gendex')}"
-
-  defp dict_path, do: Path.join(priv_path, "nam_dict.utf8.txt")
 end

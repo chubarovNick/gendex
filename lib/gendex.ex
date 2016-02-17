@@ -21,9 +21,14 @@ defmodule Gendex do
   use Application
 
   alias Gendex.Names
+  alias Gendex.Parser
 
   @doc false
-  def start(_type, _args), do: Names.start_link
+  def start(_type, _args) do
+    result = Names.start_link
+    :ok = Parser.parse
+    result
+  end
 
   @doc """
   Gets the gender of the given name.

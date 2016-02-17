@@ -1,26 +1,13 @@
 defmodule Gendex.Names do
   @moduledoc false
 
-  alias Gendex.Parser
-
   @doc false
   def start_link do
     Agent.start_link(fn -> Map.new end, name: __MODULE__)
   end
 
   @doc false
-  def exists?(name), do: get |> Map.has_key?(name)
-
-  @doc false
-  def get do
-    names = Agent.get __MODULE__, &(&1)
-    if Enum.empty?(names) do
-      Parser.parse
-      get
-    else
-      names
-    end
-  end
+  def exists?(name), do: Agent.get __MODULE__, &Map.has_key?(&1, name)
 
   @doc false
   def set(name, gender, country_values) do
@@ -35,16 +22,16 @@ defmodule Gendex.Names do
     else
       item = {gender, country_values}
       Agent.update __MODULE__, fn(names) ->
-        if Map.has_key?(names, name) do
-          n = Map.get(names, name) ++ [item]
-          Map.put(names, name, n)
-        else
-          Map.put_new(names, name, [item])
+        case Map.fetch(names, name) do
+          {:ok, value} ->
+            Map.put(names, name, value ++ [item])
+          :error ->
+            Map.put_new(names, name, [item])
         end
       end
     end
   end
 
   @doc false
-  def all, do: get |> Map.to_list
+  def all, do: Agent.get __MODULE__, &Map.to_list(&1)
 end
