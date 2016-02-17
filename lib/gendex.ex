@@ -61,8 +61,10 @@ defmodule Gendex do
   defp most_popular_gender(name) do
     if name_exists?(name) do
       [{_, matches}|_] = Enum.filter Names.all, fn(x) ->
-        {n, _} = x
-        n == name
+        case x do
+          {^name, _} -> true
+          _ -> false
+        end
       end
 
       {gender, _} = Enum.max_by matches, fn(match) ->
