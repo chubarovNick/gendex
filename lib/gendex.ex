@@ -26,7 +26,7 @@ defmodule Gendex do
   @doc false
   def start(_type, _args) do
     Entries.start_link
-    :ok = Parser.parse
+    spawn(Parser, :parse, [])
     {:ok, self}
   end
 

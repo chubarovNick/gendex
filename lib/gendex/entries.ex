@@ -5,7 +5,7 @@ defmodule Gendex.Entries do
 
   @doc false
   def start_link,
-    do: :ets.new(@table, [:set, :protected, :named_table, read_concurrency: true])
+    do: :ets.new(@table, [:set, :public, :named_table, read_concurrency: true])
 
   @doc false
   def has_key?(name),
