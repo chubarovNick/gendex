@@ -26,7 +26,13 @@ defmodule Gendex do
   @doc false
   def start(_type, _args) do
     Entries.start_link
-    spawn(Parser, :parse, [])
+
+    if Mix.env == :test do
+      Parser.parse
+    else
+      spawn(Parser, :parse, [])
+    end
+
     {:ok, self}
   end
 
