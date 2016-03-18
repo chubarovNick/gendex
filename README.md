@@ -56,4 +56,4 @@ Gendex.lookup("Pauley")
 
 ## TODO
 
-- [] Country specific gender lookup
+- [ ] Country specific gender lookup
