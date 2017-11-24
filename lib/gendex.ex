@@ -27,10 +27,10 @@ defmodule Gendex do
   def start(_type, _args) do
     Entries.start_link
 
-    if Mix.env == :test do
-      Parser.parse
-    else
+    if Application.get_env(:gendex, :spawn_parser) do
       spawn(Parser, :parse, [])
+    else
+      Parser.parse
     end
 
     {:ok, self}
