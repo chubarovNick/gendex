@@ -9,15 +9,15 @@ defmodule Gendex.Mixfile do
     [app: :gendex,
      version: @version,
      name: "Gendex",
-     package: package,
+     package: package(),
      elixir: "~> 1.2",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      source_url: @url,
      homepage_url: @url,
-     description: description,
-     deps: deps,
-     docs: docs]
+     description: description(),
+     deps: deps(),
+     docs: docs()]
   end
 
   # Configuration for the OTP application
@@ -35,7 +35,7 @@ defmodule Gendex.Mixfile do
   end
 
   defp docs do
-    [extras: docs_extras, main: "readme"]
+    [extras: docs_extras(), main: "readme"]
   end
 
   defp docs_extras do

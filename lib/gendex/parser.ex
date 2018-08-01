@@ -26,7 +26,7 @@ defmodule Gendex.Parser do
       |> String.split
       |> Enum.filter(fn(p) -> String.strip(p) != "" end)
 
-    country_values = String.slice(line, 30, String.length(line))
+    country_values = String.slice(line, 30, String.length(line)) |> :binary.copy()
     name = String.downcase(name)
 
     case gender do
