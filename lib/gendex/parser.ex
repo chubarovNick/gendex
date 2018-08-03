@@ -21,27 +21,51 @@ defmodule Gendex.Parser do
   end
 
   defp parse_name_line(line) do
-    [gender|[name|_]] =
+    [gender | [name | _]] =
       line
-      |> String.split
-      |> Enum.filter(fn(p) -> String.strip(p) != "" end)
+      |> String.split()
+      |> Enum.filter(fn p -> String.trim(p) != "" end)
 
-    country_values = String.slice(line, 30, String.length(line)) |> :binary.copy()
+    country_values =
+      line
+      |> String.slice(30, String.length(line))
+      |> String.split("")
+      |> Enum.reduce([], fn country_value, acc ->
+        if Enum.member?(["\n", "", " ", "$"], country_value) do
+          acc
+        else
+          number =
+            country_value
+            |> decode_name_friqency()
+
+          [ number | acc]
+        end
+      end)
+
     name = String.downcase(name)
 
-    case gender do
-      "M" -> Entries.set(name, :male, country_values)
-      "1M" -> Entries.set(name, :mostly_male, country_values)
-      "?M" -> Entries.set(name, :mostly_male, country_values)
-      "F" -> Entries.set(name, :female, country_values)
-      "1F" -> Entries.set(name, :mostly_female, country_values)
-      "?F" -> Entries.set(name, :mostly_female, country_values)
-      "?" -> Entries.set(name, :unisex, country_values)
-      _ -> raise "Not sure what to do with a gender of #{gender}"
-    end
+    gender =
+      case gender do
+        "M" -> :male
+        "1M" -> :mostly_male
+        "?M" -> :mostly_male
+        "F" -> :female
+        "1F" -> :mostly_female
+        "?F" -> :mostly_female
+        "?" -> :unisex
+        _ -> raise "Not sure what to do with a gender of #{gender}"
+      end
+
+    Entries.set(name, gender, country_values)
   end
 
   defp readable_line?(line) do
     !String.starts_with?(line, "#") && !String.starts_with?(line, "=")
+  end
+
+  defp decode_name_friqency(f) do
+    "0#{f}"
+    |> Base.decode16!()
+    |> :binary.decode_unsigned()
   end
 end

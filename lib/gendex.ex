@@ -25,15 +25,15 @@ defmodule Gendex do
 
   @doc false
   def start(_type, _args) do
-    Entries.start_link
+    Entries.start_link()
 
     if Application.get_env(:gendex, :spawn_parser) do
       spawn(Parser, :parse, [])
     else
-      Parser.parse
+      Parser.parse()
     end
 
-    {:ok, self}
+    {:ok, self()}
   end
 
   @doc """
@@ -47,8 +47,7 @@ defmodule Gendex do
       iex> Gendex.lookup("Unavailable")
       :unknown
   """
-  def lookup(name),
-    do: name |> String.downcase |> most_likely_gender
+  def lookup(name), do: name |> String.downcase() |> most_likely_gender
 
   @doc """
   Checks whether a name exists in `Gendex.Entries`.
@@ -63,30 +62,27 @@ defmodule Gendex do
       iex> Gendex.name_exists?("Unknown")
       false
   """
-  def name_exists?(name),
-    do: name |> String.downcase |> Entries.has_key?
+  def name_exists?(name), do: name |> String.downcase() |> Entries.has_key?()
 
   defp most_likely_gender(name) do
-    if name_exists?(name) do
-      [{_, entries}|_] = Enum.filter Entries.all, fn(entry) ->
-        case entry do
-          {^name, _} -> true
-          _ -> false
-        end
-      end
+    case Entries.lookup(name) do
+      [{_, entries} | _] ->
+        choose_more_friquent_result(entries)
 
-      {gender, _} = Enum.max_by entries, fn(entry) ->
+      _ ->
+        :unknown
+    end
+  end
+
+  defp choose_more_friquent_result(entries) do
+    {gender, _} =
+      Enum.max_by(entries, fn entry ->
         {_, country_values} = entry
 
         country_values
-        |> String.split("")
-        |> Enum.filter(fn(x) -> String.strip(x) != "" end)
         |> length
-      end
+      end)
 
-      gender
-    else
-      :unknown
-    end
+    gender
   end
 end
