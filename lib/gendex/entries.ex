@@ -26,11 +26,14 @@ defmodule Gendex.Entries do
     else
       item = [{gender, country_values}]
 
-      if has_key?(name) do
-        item = :ets.lookup_element(@table, name, 2) ++ item
-      end
+      result_item =
+        if has_key?(name) do
+          :ets.lookup_element(@table, name, 2) ++ item
+        else
+          item
+        end
 
-      :ets.insert(@table, {name, item})
+      :ets.insert(@table, {name, result_item})
     end
   end
 end
